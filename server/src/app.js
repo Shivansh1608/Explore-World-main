@@ -3,6 +3,15 @@ import cors from "cors";
 import helmet from "helmet";
 import cookieParser from "cookie-parser";
 
+// Route imports
+import authRoutes from "./modules/auth/auth.routes.js";
+import destinationRoutes from "./modules/destinations/destination.routes.js";
+import tripRoutes from "./modules/trips/trip.routes.js";
+import postRoutes from "./modules/posts/post.routes.js";
+import reviewRoutes from "./modules/reviews/review.routes.js";
+import adminRoutes from "./modules/admin/admin.routes.js";
+import aiRoutes from "./modules/ai/ai.routes.js";
+
 const app = express();
 
 app.use(helmet());
@@ -12,8 +21,8 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.json({ limit: "1mb" }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(cookieParser());
 
 // Health check API
@@ -24,6 +33,15 @@ app.get("/api/v1/health", (req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
+
+// Domain Routes
+app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/destinations", destinationRoutes);
+app.use("/api/v1/trips", tripRoutes);
+app.use("/api/v1/posts", postRoutes);
+app.use("/api/v1/reviews", reviewRoutes);
+app.use("/api/v1/admin", adminRoutes);
+app.use("/api/v1/ai", aiRoutes);
 
 // Central 404 handler
 app.use((req, res, next) => {

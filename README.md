@@ -111,3 +111,4 @@ npm run client
 ### 4. Health Check
 - **Frontend**: [http://localhost:5173](http://localhost:5173)
 - **Backend Health Check**: [http://localhost:5000/api/v1/health](http://localhost:5000/api/v1/health)
+
