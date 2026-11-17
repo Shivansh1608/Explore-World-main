@@ -18,3 +18,4 @@ router.post("/refresh", refresh);
 router.get("/me", verifyJWT, getMe);
 
 export default router;
+

@@ -10,6 +10,7 @@ import DestinationDetail from "./pages/Destination/DestinationDetail";
 import AddDestination from "./pages/Destination/AddDestination";
 import CommunityFeed from "./pages/Home/CommunityFeed";
 import Trips from "./pages/Trips/Trips";
+import MapsView from "./pages/Home/MapsView";
 import AiAssistant from "./pages/Home/AiAssistant";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import Login from "./pages/Auth/Login";
@@ -29,30 +30,17 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <div className="min-h-screen bg-slate-50 text-slate-800 flex flex-col justify-between selection:bg-emerald-100 selection:text-emerald-800">
+        <div className="min-h-screen bg-[#fafbfc] text-slate-800 flex flex-col justify-between selection:bg-emerald-100 selection:text-emerald-800 font-sans">
           <Navbar />
           <main className="flex-1">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/explore" element={<Explore />} />
               <Route path="/destinations/:id" element={<DestinationDetail />} />
-              <Route
-                path="/destinations/new"
-                element={
-                  <ProtectedRoute>
-                    <AddDestination />
-                  </ProtectedRoute>
-                }
-              />
+              <Route path="/destinations/new" element={<AddDestination />} />
               <Route path="/community" element={<CommunityFeed />} />
-              <Route
-                path="/trips"
-                element={
-                  <ProtectedRoute>
-                    <Trips />
-                  </ProtectedRoute>
-                }
-              />
+              <Route path="/trips" element={<Trips />} />
+              <Route path="/maps" element={<MapsView />} />
               <Route path="/ai-assistant" element={<AiAssistant />} />
               <Route
                 path="/admin"

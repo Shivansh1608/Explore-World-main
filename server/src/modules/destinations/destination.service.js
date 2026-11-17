@@ -115,3 +115,4 @@ export const deleteDestination = async (id, user) => {
   await destination.deleteOne();
   return { message: "Destination deleted successfully" };
 };
+

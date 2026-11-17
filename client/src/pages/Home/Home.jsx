@@ -1,93 +1,424 @@
-import { Link } from "react-router-dom";
-import { Compass, Sparkles, MapPin, Users, Calendar, ArrowRight, ShieldCheck } from "lucide-react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  Search,
+  Star,
+  Bookmark,
+  ArrowRight,
+  Sparkles,
+  Zap,
+  Waves,
+  Compass,
+  Landmark,
+  Palette,
+  Trees,
+  Globe2,
+} from "lucide-react";
 
 export default function Home() {
+  const [searchDestination, setSearchDestination] = useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchDestination.trim()) {
+      navigate(`/explore?search=${encodeURIComponent(searchDestination)}`);
+    } else {
+      navigate("/explore");
+    }
+  };
+
+  const popularDestinations = [
+    {
+      id: "bali",
+      name: "Bali",
+      location: "Ubud, Indonesia",
+      category: "Beach",
+      rating: 4.9,
+      price: "₹42,000",
+      image:
+        "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=800&q=80",
+    },
+    {
+      id: "manali",
+      name: "Manali",
+      location: "Himachal Pradesh, India",
+      category: "Mountains",
+      rating: 4.8,
+      price: "₹18,500",
+      image:
+        "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=800&q=80",
+    },
+    {
+      id: "swiss-alps",
+      name: "Swiss Alps",
+      location: "Interlaken, Switzerland",
+      category: "Adventure",
+      rating: 4.9,
+      price: "₹1,48,000",
+      image:
+        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+    },
+    {
+      id: "paris",
+      name: "Paris",
+      location: "Île-de-France, France",
+      category: "Historical",
+      rating: 4.7,
+      price: "₹92,000",
+      image:
+        "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80",
+    },
+    {
+      id: "maldives",
+      name: "Maldives",
+      location: "North Malé Atoll, Maldives",
+      category: "Beach",
+      rating: 4.9,
+      price: "₹78,000",
+      image:
+        "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=800&q=80",
+    },
+    {
+      id: "tokyo",
+      name: "Tokyo",
+      location: "Kantō, Japan",
+      category: "Culture",
+      rating: 4.8,
+      price: "₹84,000",
+      image:
+        "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=800&q=80",
+    },
+  ];
+
+  const categories = [
+    {
+      name: "Mountains",
+      icon: Zap,
+      bg: "bg-[#e8f7f0]",
+      color: "text-[#00875a]",
+    },
+    {
+      name: "Beaches",
+      icon: Waves,
+      bg: "bg-[#e8f4fa]",
+      color: "text-[#0070a3]",
+    },
+    {
+      name: "Adventure",
+      icon: Compass,
+      bg: "bg-[#fff2e8]",
+      color: "text-[#d9480f]",
+    },
+    {
+      name: "Historical",
+      icon: Landmark,
+      bg: "bg-[#fff8e6]",
+      color: "text-[#b25e00]",
+    },
+    {
+      name: "Culture",
+      icon: Palette,
+      bg: "bg-[#f3edff]",
+      color: "text-[#6741d9]",
+    },
+    {
+      name: "Wildlife",
+      icon: Trees,
+      bg: "bg-[#f2f9e8]",
+      color: "text-[#5c940d]",
+    },
+  ];
+
+  const stories = [
+    {
+      author: "Maya Kapoor",
+      avatarInitials: "MK",
+      location: "Kyoto, Japan • 2h ago",
+      image:
+        "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80",
+      caption:
+        "The quietest morning at Arashiyama. Arrive before 7 and the bamboo grove feels like it belongs only to you.",
+    },
+    {
+      author: "Arjun Mehta",
+      avatarInitials: "AM",
+      location: "Manali, India • Yesterday",
+      image:
+        "https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=800&q=80",
+      caption:
+        "Woke up above the cloudline at Solang. Crisp Himalayan air, steaming chai, and unbroken silence.",
+    },
+    {
+      author: "Sofia Laurent",
+      avatarInitials: "SL",
+      location: "Amalfi Coast, Italy • 3 days ago",
+      image:
+        "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=800&q=80",
+      caption:
+        "Cliffside walks from Positano to Praiano. The coast never stops astonishing with its pastel tones.",
+    },
+  ];
+
   return (
-    <div className="space-y-20 pb-20">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-emerald-50/50 via-white to-slate-50 pt-16 pb-24 sm:pt-24 sm:pb-32">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-100/80 text-emerald-800 rounded-full text-xs font-bold border border-emerald-200 mb-6">
-            <Compass className="w-3.5 h-3.5" /> Next-Gen Travel Discovery & Social Network
-          </span>
-          <h1 className="text-4xl sm:text-6xl font-black text-slate-900 tracking-tight max-w-4xl mx-auto leading-tight">
-            Discover Places. Share Experiences.{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">
-              Explore Together.
-            </span>
+    <div className="space-y-24 pb-20">
+      {/* 1. HERO SECTION */}
+      <section className="relative min-h-[640px] flex items-center justify-center overflow-hidden">
+        {/* Dark tinted high-res background image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: `url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2000&q=85')`,
+          }}
+        >
+          <div className="absolute inset-0 bg-slate-950/45 backdrop-brightness-90" />
+        </div>
+
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center text-white">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-xs font-medium text-emerald-200 mb-8">
+            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+            <span>Make room for wonder</span>
+          </div>
+
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight leading-[1.1] max-w-4xl mx-auto text-white">
+            Discover the world, one journey at a time.
           </h1>
-          <p className="mt-6 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            Uncover off-the-beaten-path locations, connect with seasoned adventurers, build custom itineraries, and get personalized AI travel guidance.
+
+          <p className="mt-6 text-base sm:text-lg text-slate-200 max-w-2xl mx-auto font-normal leading-relaxed">
+            Find extraordinary destinations, share your adventures, and explore together with a community that travels thoughtfully.
           </p>
 
-          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link
-              to="/explore"
-              className="w-full sm:w-auto px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 text-sm"
+          {/* Large Hero Search Bar */}
+          <form
+            onSubmit={handleSearch}
+            className="mt-10 max-w-2xl mx-auto bg-white rounded-full p-2 pl-6 shadow-2xl flex items-center gap-3 border border-white/40"
+          >
+            <Search className="w-5 h-5 text-slate-400 shrink-0" />
+            <input
+              type="text"
+              value={searchDestination}
+              onChange={(e) => setSearchDestination(e.target.value)}
+              placeholder="Where would you like to go?"
+              className="flex-1 bg-transparent text-slate-900 placeholder-slate-400 text-sm focus:outline-none"
+            />
+            <button
+              type="submit"
+              className="px-6 py-3 bg-[#00875a] hover:bg-[#007048] text-white text-sm font-semibold rounded-full flex items-center gap-2 transition-colors shadow-sm"
             >
-              Explore Destinations <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link
-              to="/ai-assistant"
-              className="w-full sm:w-auto px-8 py-3.5 bg-white hover:bg-slate-50 text-slate-800 font-bold rounded-xl border border-slate-200 shadow-sm transition-all flex items-center justify-center gap-2 text-sm"
-            >
-              <Sparkles className="w-4 h-4 text-emerald-600" /> Plan with AI
-            </Link>
+              Explore now <ArrowRight className="w-4 h-4" />
+            </button>
+          </form>
+
+          {/* Quick search tags */}
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-2 text-xs text-slate-300">
+            <span className="text-slate-400">Try searching</span>
+            {["Bali", "Mountain escapes", "Slow travel"].map((tag) => (
+              <button
+                key={tag}
+                onClick={() => {
+                  setSearchDestination(tag);
+                  navigate(`/explore?search=${encodeURIComponent(tag)}`);
+                }}
+                className="px-3.5 py-1 rounded-full bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/15 text-slate-200 transition-colors"
+              >
+                {tag}
+              </button>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Feature Pillar Highlights */}
+      {/* 2. POPULAR DESTINATIONS SECTION */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-xs">
-            <div className="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-6">
-              <MapPin className="w-6 h-6" />
-            </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-2">Crowdsourced Atlas</h3>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              Real destinations submitted by travelers, complete with realistic budget estimates, seasonal advisories, and genuine reviews.
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+          <div>
+            <span className="text-xs uppercase font-extrabold tracking-wider text-[#00875a]">
+              Curated for you
+            </span>
+            <h2 className="text-3xl font-black text-slate-900 tracking-tight mt-1">
+              Popular destinations
+            </h2>
+            <p className="text-sm text-slate-500 mt-1">
+              Places with a little extra magic, selected by travellers who like to take the scenic route.
             </p>
           </div>
+          <Link
+            to="/explore"
+            className="text-xs font-bold text-[#00875a] hover:text-[#007048] flex items-center gap-1 group self-start sm:self-auto"
+          >
+            View all <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+          </Link>
+        </div>
 
-          <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-xs">
-            <div className="w-12 h-12 bg-teal-50 text-teal-600 rounded-2xl flex items-center justify-center mb-6">
-              <Users className="w-6 h-6" />
-            </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-2">Traveler Community</h3>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              Share your adventures, post travel photos, like stories, and exchange first-hand travel insights directly with explorers worldwide.
-            </p>
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {popularDestinations.map((dest) => (
+            <div
+              key={dest.id}
+              className="group bg-white rounded-3xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col"
+            >
+              <div className="relative w-full h-56 overflow-hidden">
+                <img
+                  src={dest.image}
+                  alt={dest.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <span className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-slate-800 shadow-sm">
+                  {dest.category}
+                </span>
+                <button className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-slate-600 hover:text-slate-900 shadow-sm transition-colors">
+                  <Bookmark className="w-4 h-4" />
+                </button>
+              </div>
 
-          <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-xs">
-            <div className="w-12 h-12 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center mb-6">
-              <Sparkles className="w-6 h-6" />
+              <div className="p-5 flex-1 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-bold text-slate-900">{dest.name}</h3>
+                    <div className="flex items-center gap-1 text-xs font-bold text-slate-800">
+                      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                      <span>{dest.rating}</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-400 mt-1">{dest.location}</p>
+                </div>
+
+                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                  <div>
+                    <span className="text-[11px] text-slate-400 block font-medium">from</span>
+                    <span className="text-sm font-black text-slate-900">{dest.price}</span>
+                  </div>
+                  <Link
+                    to={`/destinations/${dest.id}`}
+                    className="text-xs font-bold text-[#00875a] flex items-center gap-1 hover:underline"
+                  >
+                    View details &gt;
+                  </Link>
+                </div>
+              </div>
             </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-2">Smart AI Planner</h3>
-            <p className="text-sm text-slate-500 leading-relaxed">
-              Input your budget, departure city, and travel duration to receive an instant, AI-tailored daily itinerary and cost estimate.
-            </p>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* Call to action */}
-      <section className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="bg-emerald-600 rounded-3xl p-8 sm:p-12 text-center text-white shadow-xl relative overflow-hidden">
-          <h2 className="text-3xl sm:text-4xl font-black tracking-tight">
-            Ready to Start Your Journey?
+      {/* 3. EXPLORE BY CATEGORY */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mb-8">
+          <span className="text-xs uppercase font-extrabold tracking-wider text-[#00875a]">
+            Find your feeling
+          </span>
+          <h2 className="text-3xl font-black text-slate-900 tracking-tight mt-1">
+            Explore by category
           </h2>
-          <p className="mt-3 text-emerald-100 max-w-xl mx-auto text-sm sm:text-base">
-            Join thousands of travelers cataloging world landmarks and hidden viewpoints.
-          </p>
-          <div className="mt-8 flex justify-center gap-4">
-            <Link
-              to="/register"
-              className="px-6 py-3 bg-white text-emerald-800 font-bold rounded-xl text-sm shadow-sm hover:bg-emerald-50 transition-colors"
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+          {categories.map((cat) => {
+            const Icon = cat.icon;
+            return (
+              <button
+                key={cat.name}
+                onClick={() => navigate(`/explore?category=${cat.name}`)}
+                className={`${cat.bg} p-6 rounded-3xl text-left hover:scale-[1.02] transition-transform flex flex-col justify-between min-h-[140px]`}
+              >
+                <Icon className={`w-5 h-5 ${cat.color}`} />
+                <div>
+                  <span className={`text-sm font-black block ${cat.color}`}>
+                    {cat.name}
+                  </span>
+                  <span className="text-xs text-slate-400 font-mono">⌟</span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* 4. STORIES WORTH FOLLOWING */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+          <div>
+            <span className="text-xs uppercase font-extrabold tracking-wider text-[#00875a]">
+              From the community
+            </span>
+            <h2 className="text-3xl font-black text-slate-900 tracking-tight mt-1">
+              Stories worth following
+            </h2>
+            <p className="text-sm text-slate-500 mt-1">
+              A little inspiration from people out there collecting moments, not things.
+            </p>
+          </div>
+          <Link
+            to="/community"
+            className="text-xs font-bold text-[#00875a] hover:text-[#007048] flex items-center gap-1 group self-start sm:self-auto"
+          >
+            Visit community <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {stories.map((story, i) => (
+            <div
+              key={i}
+              className="bg-white rounded-3xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col"
             >
-              Create Free Account
-            </Link>
+              <div className="p-4 flex items-center justify-between border-b border-slate-50">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-full bg-[#d3f9d8] text-[#087f5b] font-bold text-xs flex items-center justify-center border border-[#b2f2bb]">
+                    {story.avatarInitials}
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-900">{story.author}</h4>
+                    <p className="text-[11px] text-slate-400">{story.location}</p>
+                  </div>
+                </div>
+                <span className="text-slate-300 font-bold tracking-widest text-xs">...</span>
+              </div>
+
+              <div className="w-full h-64 overflow-hidden bg-slate-100">
+                <img
+                  src={story.image}
+                  alt={story.author}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              <div className="p-5 flex-1">
+                <p className="text-xs text-slate-600 leading-relaxed">
+                  {story.caption}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 5. NEWSLETTER / CALL TO ACTION BANNER */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative rounded-3xl bg-[#00875a] p-8 sm:p-14 overflow-hidden text-white flex flex-col justify-between min-h-[260px]">
+          {/* Subtle concentric circles in corner */}
+          <div className="absolute -right-16 -top-16 w-80 h-80 rounded-full border-[30px] border-white/10 pointer-events-none" />
+
+          <div>
+            <div className="w-10 h-10 rounded-full bg-white/15 flex items-center justify-center text-white mb-4">
+              <Globe2 className="w-6 h-6" />
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-black tracking-tight max-w-xl">
+              A better way to keep your world open.
+            </h2>
+            <p className="mt-2 text-emerald-100 text-xs sm:text-sm max-w-lg">
+              Monthly notes on places to go, people to meet, and how to travel with more curiosity.
+            </p>
+          </div>
+
+          <div className="mt-8 flex flex-col sm:flex-row items-center gap-3 max-w-md">
+            <input
+              type="email"
+              placeholder="Your email address"
+              className="w-full px-5 py-3 rounded-full bg-white/15 placeholder-emerald-200/80 text-white text-xs border border-white/20 focus:outline-none focus:bg-white/25"
+            />
+            <button className="w-full sm:w-auto px-6 py-3 bg-[#fab005] hover:bg-[#f59f00] text-slate-950 font-bold text-xs rounded-full whitespace-nowrap shadow-sm transition-colors">
+              Join the journal
+            </button>
           </div>
         </div>
       </section>

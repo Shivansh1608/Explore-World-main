@@ -59,3 +59,4 @@ export const removeDestination = asyncHandler(async (req, res) => {
     message: result.message,
   });
 });
+

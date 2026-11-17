@@ -17,3 +17,4 @@ router.put("/:id", verifyJWT, updateExistingDestination);
 router.delete("/:id", verifyJWT, removeDestination);
 
 export default router;
+

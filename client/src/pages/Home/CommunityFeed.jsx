@@ -1,182 +1,209 @@
-import { useState, useEffect } from "react";
-import API from "../../services/api";
-import { useAuth } from "../../context/AuthContext";
-import { Heart, MessageSquare, Send, Image, Compass } from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { Image, ChevronRight, Sparkles, Send } from "lucide-react";
 
 export default function CommunityFeed() {
-  const { user } = useAuth();
-  const [posts, setPosts] = useState([]);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [posting, setPosting] = useState(false);
+  const [newStory, setNewStory] = useState("");
 
-  const fetchPosts = async () => {
-    try {
-      const res = await API.get("/posts");
-      setPosts(res.data.data || []);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const trendingPlaces = [
+    {
+      num: "01",
+      name: "Bali",
+      country: "Indonesia",
+      image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=200&q=80",
+    },
+    {
+      num: "02",
+      name: "Manali",
+      country: "India",
+      image: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=200&q=80",
+    },
+    {
+      num: "03",
+      name: "Swiss Alps",
+      country: "Switzerland",
+      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=200&q=80",
+    },
+    {
+      num: "04",
+      name: "Paris",
+      country: "France",
+      image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=200&q=80",
+    },
+  ];
 
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
-  const handleCreatePost = async (e) => {
-    e.preventDefault();
-    if (!user) return alert("Please log in to post");
-    setPosting(true);
-    try {
-      const payload = {
-        title,
-        content,
-        images: imageUrl ? [{ url: imageUrl }] : [],
-      };
-      const res = await API.post("/posts", payload);
-      setPosts([res.data.data, ...posts]);
-      setTitle("");
-      setContent("");
-      setImageUrl("");
-    } catch (err) {
-      alert("Failed to share post");
-    } finally {
-      setPosting(false);
-    }
-  };
-
-  const handleLike = async (postId) => {
-    if (!user) return alert("Please log in to like posts");
-    try {
-      const res = await API.post(`/posts/${postId}/like`);
-      setPosts(
-        posts.map((p) => {
-          if (p._id === postId) {
-            const hasLiked = p.likes?.includes(user._id);
-            const newLikes = hasLiked
-              ? p.likes.filter((id) => id !== user._id)
-              : [...(p.likes || []), user._id];
-            return { ...p, likes: newLikes };
-          }
-          return p;
-        })
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const stories = [
+    {
+      author: "Maya Kapoor",
+      initials: "MK",
+      location: "Kyoto, Japan • 2h ago",
+      image: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1000&q=80",
+      caption: "The quietest morning at Arashiyama. Arrive before 7 and the bamboo grove feels like it belongs only to you.",
+    },
+    {
+      author: "Arjun Mehta",
+      initials: "AM",
+      location: "Manali, India • Yesterday",
+      image: "https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=1000&q=80",
+      caption: "Woke up above the cloudline at Solang. Crisp Himalayan air, steaming chai, and unbroken silence.",
+    },
+  ];
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-10">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-black text-slate-900 tracking-tight">Traveler Feed</h1>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+      <div>
+        <h1 className="text-3xl font-black text-slate-900 tracking-tight">Community</h1>
         <p className="text-xs text-slate-500 mt-1">
-          Real-time stories, photos, and updates from adventurers around the globe.
+          Stories, tips and the people making the world feel a little smaller.
         </p>
       </div>
 
-      {/* Share Box */}
-      {user && (
-        <form onSubmit={handleCreatePost} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm mb-8 space-y-3">
-          <input
-            type="text"
-            required
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Post Title (e.g. Hiking the Dolomites at sunrise...)"
-            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-          />
-          <textarea
-            rows={3}
-            required
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="Share your travel experience, recommendations, or questions..."
-            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-          />
-          <input
-            type="url"
-            value={imageUrl}
-            onChange={(e) => setImageUrl(e.target.value)}
-            placeholder="Photo URL (optional)..."
-            className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
-          />
-          <div className="flex justify-end pt-1">
-            <button
-              type="submit"
-              disabled={posting}
-              className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl flex items-center gap-1.5 shadow-sm transition-colors"
-            >
-              <Send className="w-3.5 h-3.5" /> {posting ? "Sharing..." : "Post to Feed"}
-            </button>
-          </div>
-        </form>
-      )}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Left Column: User Profile Card & Navigation */}
+        <div className="lg:col-span-3 space-y-5">
+          {/* User mini badge */}
+          <div className="bg-white p-6 rounded-3xl border border-slate-200/90 shadow-xs space-y-5">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-[#d3f9d8] text-[#087f5b] font-bold text-sm flex items-center justify-center border border-[#b2f2bb]">
+                AR
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-slate-900">Aarav Rao</h3>
+                <p className="text-xs text-slate-400">Delhi, India</p>
+              </div>
+            </div>
 
-      {/* Feed Stream */}
-      <div className="space-y-6">
-        {loading ? (
-          <p className="text-center text-sm text-slate-400 animate-pulse">Loading feed...</p>
-        ) : posts.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-2xl border border-dashed border-slate-200">
-            <Compass className="w-10 h-10 text-slate-300 mx-auto mb-2" />
-            <p className="text-sm font-semibold text-slate-600">No posts shared yet!</p>
+            <div className="flex items-center justify-between border-t border-slate-100 pt-4 text-center">
+              <div>
+                <span className="text-lg font-black text-slate-900 block leading-tight">24</span>
+                <span className="text-[11px] text-slate-400 font-medium">Posts</span>
+              </div>
+              <div>
+                <span className="text-lg font-black text-slate-900 block leading-tight">1.2k</span>
+                <span className="text-[11px] text-slate-400 font-medium">Followers</span>
+              </div>
+              <div>
+                <span className="text-lg font-black text-slate-900 block leading-tight">18</span>
+                <span className="text-[11px] text-slate-400 font-medium">Places</span>
+              </div>
+            </div>
           </div>
-        ) : (
-          posts.map((post) => {
-            const isLiked = user && post.likes?.includes(user._id);
-            return (
-              <div key={post._id} className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
-                <div className="p-4 flex items-center gap-3">
-                  <img
-                    src={post.author?.profileImage || `https://api.dicebear.com/7.x/initials/svg?seed=user`}
-                    alt="Author"
-                    className="w-9 h-9 rounded-full"
-                  />
-                  <div>
-                    <h4 className="text-sm font-bold text-slate-900">{post.author?.name || "Traveler"}</h4>
-                    <span className="text-[11px] text-slate-400">
-                      {new Date(post.createdAt).toLocaleDateString()}
-                    </span>
+
+          {/* Quick links list */}
+          <div className="bg-white rounded-3xl border border-slate-200/90 shadow-xs overflow-hidden divide-y divide-slate-100">
+            <Link to="/profile" className="flex items-center justify-between px-6 py-4 text-xs font-semibold text-slate-700 hover:bg-slate-50">
+              <span>My profile</span>
+              <ChevronRight className="w-4 h-4 text-slate-400" />
+            </Link>
+            <Link to="/saved" className="flex items-center justify-between px-6 py-4 text-xs font-semibold text-slate-700 hover:bg-slate-50">
+              <span>Saved places</span>
+              <ChevronRight className="w-4 h-4 text-slate-400" />
+            </Link>
+            <Link to="/trips" className="flex items-center justify-between px-6 py-4 text-xs font-semibold text-slate-700 hover:bg-slate-50">
+              <span>Plan a trip</span>
+              <ChevronRight className="w-4 h-4 text-slate-400" />
+            </Link>
+            <Link to="/messages" className="flex items-center justify-between px-6 py-4 text-xs font-semibold text-slate-700 hover:bg-slate-50">
+              <span>Messages</span>
+              <ChevronRight className="w-4 h-4 text-slate-400" />
+            </Link>
+          </div>
+        </div>
+
+        {/* Center Column: Share Box & Feed */}
+        <div className="lg:col-span-6 space-y-6">
+          {/* Post creator box */}
+          <div className="bg-white p-5 rounded-3xl border border-slate-200/90 shadow-xs space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-full bg-[#d3f9d8] text-[#087f5b] font-bold text-xs flex items-center justify-center border border-[#b2f2bb] shrink-0">
+                AR
+              </div>
+              <input
+                type="text"
+                value={newStory}
+                onChange={(e) => setNewStory(e.target.value)}
+                placeholder="What did you discover today?"
+                className="w-full bg-slate-50 border border-slate-200/70 rounded-2xl px-4 py-2.5 text-xs text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00875a]/30 focus:border-[#00875a]"
+              />
+            </div>
+            <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+              <button className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900">
+                <Image className="w-4 h-4 text-slate-500" /> Add photo
+              </button>
+              <button className="px-5 py-2 bg-[#00875a] hover:bg-[#007048] text-white text-xs font-bold rounded-full transition-colors shadow-sm">
+                Share story
+              </button>
+            </div>
+          </div>
+
+          {/* Stories stream */}
+          <div className="space-y-6">
+            {stories.map((story, i) => (
+              <div
+                key={i}
+                className="bg-white rounded-3xl border border-slate-200/90 overflow-hidden shadow-xs"
+              >
+                <div className="p-4 flex items-center justify-between border-b border-slate-50">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full bg-[#d3f9d8] text-[#087f5b] font-bold text-xs flex items-center justify-center border border-[#b2f2bb]">
+                      {story.initials}
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-900">{story.author}</h4>
+                      <p className="text-[11px] text-slate-400">{story.location}</p>
+                    </div>
                   </div>
+                  <span className="text-slate-300 font-bold tracking-widest text-xs">...</span>
                 </div>
 
-                <div className="px-5 pb-3">
-                  <h3 className="text-base font-bold text-slate-900 mb-1">{post.title}</h3>
-                  <p className="text-sm text-slate-600 whitespace-pre-line leading-relaxed">
-                    {post.content}
+                <div className="w-full h-80 overflow-hidden bg-slate-100">
+                  <img
+                    src={story.image}
+                    alt={story.author}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+
+                <div className="p-5">
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    {story.caption}
                   </p>
                 </div>
-
-                {post.images?.[0]?.url && (
-                  <div className="w-full max-h-96 bg-slate-100 overflow-hidden">
-                    <img
-                      src={post.images[0].url}
-                      alt="Post content"
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                )}
-
-                <div className="px-5 py-3 border-t border-slate-100 flex items-center gap-6">
-                  <button
-                    onClick={() => handleLike(post._id)}
-                    className={`flex items-center gap-1.5 text-xs font-semibold transition-colors ${
-                      isLiked ? "text-rose-600" : "text-slate-500 hover:text-slate-800"
-                    }`}
-                  >
-                    <Heart className={`w-4 h-4 ${isLiked ? "fill-current text-rose-600" : ""}`} />
-                    <span>{post.likes?.length || 0} Likes</span>
-                  </button>
-                </div>
               </div>
-            );
-          })
-        )}
+            ))}
+          </div>
+        </div>
+
+        {/* Right Column: Trending Places & Callout */}
+        <div className="lg:col-span-3 space-y-6">
+          <div className="bg-white p-6 rounded-3xl border border-slate-200/90 shadow-xs space-y-4">
+            <h3 className="text-sm font-bold text-slate-900">Trending places</h3>
+            <div className="space-y-3 pt-1">
+              {trendingPlaces.map((place) => (
+                <div key={place.name} className="flex items-center gap-3 hover:bg-slate-50 p-1.5 rounded-2xl transition-colors cursor-pointer">
+                  <span className="text-xs font-mono font-bold text-slate-400">{place.num}</span>
+                  <img
+                    src={place.image}
+                    alt={place.name}
+                    className="w-10 h-10 rounded-xl object-cover shrink-0"
+                  />
+                  <div>
+                    <h4 className="text-xs font-bold text-slate-900 leading-tight">{place.name}</h4>
+                    <p className="text-[11px] text-slate-400">{place.country}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-[#00875a] p-6 rounded-3xl text-white space-y-2 relative overflow-hidden">
+            <Sparkles className="w-5 h-5 text-emerald-200" />
+            <h4 className="text-base font-black tracking-tight pt-1">Find your people.</h4>
+            <p className="text-xs text-emerald-100 leading-relaxed">
+              Follow travellers with a point of view and build a feed that feels like a window on the world.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

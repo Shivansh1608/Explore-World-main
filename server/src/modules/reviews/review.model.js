@@ -23,3 +23,4 @@ reviewSchema.index({ destination: 1, author: 1 }, { unique: true });
 
 const Review = mongoose.model("Review", reviewSchema);
 export default Review;
+
