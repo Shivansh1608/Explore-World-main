@@ -1,78 +1,88 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Search, SlidersHorizontal, ChevronDown, Bookmark, Star, Plus } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import API from "../../services/api";
+import { fallbackDestinations } from "../../data/fallbackDestinations";
+import { Search, SlidersHorizontal, ChevronDown, Bookmark, Star, Plus, Loader2 } from "lucide-react";
 
 export default function Explore() {
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [search, setSearch] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialCategory = searchParams.get("category") || "All";
+  const initialSearch = searchParams.get("search") || "";
+
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
+  const [search, setSearch] = useState(initialSearch);
+  const [destinations, setDestinations] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const categories = ["Mountains", "Beaches", "Adventure", "Historical", "Culture", "Wildlife"];
 
-  const places = [
-    {
-      id: "paris",
-      name: "Paris",
-      location: "Île-de-France, France",
-      category: "Historical",
-      rating: 4.7,
-      price: "₹92,000",
-      image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      id: "bali",
-      name: "Bali",
-      location: "Ubud, Indonesia",
-      category: "Beach",
-      rating: 4.9,
-      price: "₹42,000",
-      image: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      id: "tokyo",
-      name: "Tokyo",
-      location: "Kantō, Japan",
-      category: "Culture",
-      rating: 4.8,
-      price: "₹84,000",
-      image: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      id: "manali",
-      name: "Manali",
-      location: "Himachal Pradesh, India",
-      category: "Mountains",
-      rating: 4.8,
-      price: "₹18,500",
-      image: "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      id: "maldives",
-      name: "Maldives",
-      location: "North Malé Atoll, Maldives",
-      category: "Beach",
-      rating: 4.9,
-      price: "₹78,000",
-      image: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      id: "swiss-alps",
-      name: "Swiss Alps",
-      location: "Interlaken, Switzerland",
-      category: "Adventure",
-      rating: 4.9,
-      price: "₹1,48,000",
-      image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
-    },
-  ];
+  useEffect(() => {
+    const qCategory = searchParams.get("category");
+    const qSearch = searchParams.get("search");
+    if (qCategory) setSelectedCategory(qCategory);
+    if (qSearch) setSearch(qSearch);
+  }, [searchParams]);
 
-  const filteredPlaces = places.filter((p) => {
+  useEffect(() => {
+    let isMounted = true;
+    const fetchDestinations = async () => {
+      setLoading(true);
+      try {
+        const res = await API.get("/destinations?limit=30");
+        if (res?.data?.data && res.data.data.length > 0) {
+          if (isMounted) setDestinations(res.data.data);
+        } else {
+          if (isMounted) setDestinations(fallbackDestinations);
+        }
+      } catch (err) {
+        console.warn("Using fallback destinations catalog:", err.message);
+        if (isMounted) setDestinations(fallbackDestinations);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    fetchDestinations();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const handleCategorySelect = (cat) => {
+    setSelectedCategory(cat);
+    const newParams = new URLSearchParams(searchParams);
+    if (cat === "All") {
+      newParams.delete("category");
+    } else {
+      newParams.set("category", cat);
+    }
+    setSearchParams(newParams);
+  };
+
+  const handleSearchChange = (val) => {
+    setSearch(val);
+    const newParams = new URLSearchParams(searchParams);
+    if (val.trim()) {
+      newParams.set("search", val);
+    } else {
+      newParams.delete("search");
+    }
+    setSearchParams(newParams);
+  };
+
+  const placesToFilter = destinations.length > 0 ? destinations : fallbackDestinations;
+
+  const filteredPlaces = placesToFilter.filter((p) => {
+    const pCats = Array.isArray(p.category) ? p.category : [p.category || ""];
     const matchCategory =
       selectedCategory === "All" ||
-      p.category.toLowerCase().includes(selectedCategory.toLowerCase());
-    const matchSearch =
-      !search ||
-      p.name.toLowerCase().includes(search.toLowerCase()) ||
-      p.location.toLowerCase().includes(search.toLowerCase());
+      pCats.some((c) => c && c.toLowerCase().includes(selectedCategory.toLowerCase()));
+
+    const locationStr = `${p.city || ""} ${p.state || ""} ${p.country || ""} ${p.location || ""}`.toLowerCase();
+    const nameStr = (p.name || "").toLowerCase();
+    const q = search.toLowerCase();
+
+    const matchSearch = !search || nameStr.includes(q) || locationStr.includes(q);
     return matchCategory && matchSearch;
   });
 
@@ -104,7 +114,7 @@ export default function Explore() {
             <input
               type="text"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               placeholder="Search by place, country or feeling..."
               className="w-full pl-11 pr-4 py-2.5 bg-slate-50 border border-slate-200/70 rounded-full text-xs font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00875a]/30 focus:border-[#00875a]"
             />
@@ -125,7 +135,7 @@ export default function Explore() {
         {/* Category rounded pills */}
         <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none pt-1">
           <button
-            onClick={() => setSelectedCategory("All")}
+            onClick={() => handleCategorySelect("All")}
             className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-colors ${
               selectedCategory === "All"
                 ? "bg-[#00875a] text-white"
@@ -137,7 +147,7 @@ export default function Explore() {
           {categories.map((cat) => (
             <button
               key={cat}
-              onClick={() => setSelectedCategory(cat)}
+              onClick={() => handleCategorySelect(cat)}
               className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-colors whitespace-nowrap ${
                 selectedCategory === cat
                   ? "bg-[#00875a] text-white"
@@ -152,13 +162,15 @@ export default function Explore() {
 
       {/* Results Header */}
       <div className="flex items-center justify-between text-xs text-slate-400">
-        <span className="font-semibold text-slate-700">{filteredPlaces.length} places found</span>
+        <span className="font-semibold text-slate-700">
+          {loading ? "Loading places..." : `${filteredPlaces.length} places found`}
+        </span>
         <button
           onClick={() => {
-            setSelectedCategory("All");
-            setSearch("");
+            handleCategorySelect("All");
+            handleSearchChange("");
           }}
-          className="text-slate-500 hover:text-slate-800 font-medium"
+          className="text-slate-500 hover:text-slate-800 font-medium cursor-pointer"
         >
           Clear filters
         </button>
@@ -166,52 +178,69 @@ export default function Explore() {
 
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredPlaces.map((dest) => (
-          <div
-            key={dest.id}
-            className="group bg-white rounded-3xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col"
-          >
-            <div className="relative w-full h-56 overflow-hidden">
-              <img
-                src={dest.image}
-                alt={dest.name}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
-              <span className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-slate-800 shadow-sm">
-                {dest.category}
-              </span>
-              <button className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-slate-600 hover:text-slate-900 shadow-sm transition-colors">
-                <Bookmark className="w-4 h-4" />
-              </button>
-            </div>
+        {filteredPlaces.map((dest) => {
+          const destId = dest._id || dest.id;
+          const displayImage =
+            dest.images?.[0]?.url ||
+            dest.image ||
+            "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80";
+          const displayCategory = Array.isArray(dest.category)
+            ? dest.category[0] || "Explore"
+            : dest.category || "Explore";
+          const displayLocation = dest.city
+            ? `${dest.city}, ${dest.country}`
+            : dest.location || dest.country || "";
+          const displayPrice = dest.estimatedBudget
+            ? `₹${dest.estimatedBudget.toLocaleString()}`
+            : dest.price || "₹25,000";
 
-            <div className="p-5 flex-1 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-bold text-slate-900">{dest.name}</h3>
-                  <div className="flex items-center gap-1 text-xs font-bold text-slate-800">
-                    <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                    <span>{dest.rating}</span>
-                  </div>
-                </div>
-                <p className="text-xs text-slate-400 mt-1">{dest.location}</p>
+          return (
+            <div
+              key={destId}
+              className="group bg-white rounded-3xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col"
+            >
+              <div className="relative w-full h-56 overflow-hidden">
+                <img
+                  src={displayImage}
+                  alt={dest.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <span className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-slate-800 shadow-sm">
+                  {displayCategory}
+                </span>
+                <button className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-slate-600 hover:text-slate-900 shadow-sm transition-colors">
+                  <Bookmark className="w-4 h-4" />
+                </button>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+              <div className="p-5 flex-1 flex flex-col justify-between">
                 <div>
-                  <span className="text-[11px] text-slate-400 block font-medium">from</span>
-                  <span className="text-sm font-black text-slate-900">{dest.price}</span>
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-bold text-slate-900">{dest.name}</h3>
+                    <div className="flex items-center gap-1 text-xs font-bold text-slate-800">
+                      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                      <span>{dest.rating || 4.8}</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-400 mt-1">{displayLocation}</p>
                 </div>
-                <Link
-                  to={`/destinations/${dest.id}`}
-                  className="text-xs font-bold text-[#00875a] flex items-center gap-1 hover:underline"
-                >
-                  View details &gt;
-                </Link>
+
+                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                  <div>
+                    <span className="text-[11px] text-slate-400 block font-medium">from</span>
+                    <span className="text-sm font-black text-slate-900">{displayPrice}</span>
+                  </div>
+                  <Link
+                    to={`/destinations/${destId}`}
+                    className="text-xs font-bold text-[#00875a] flex items-center gap-1 hover:underline"
+                  >
+                    View details &gt;
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

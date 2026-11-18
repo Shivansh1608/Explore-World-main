@@ -1,5 +1,8 @@
 import { Router } from "express";
+import mongoose from "mongoose";
 import Review from "./review.model.js";
+import Destination from "../destinations/destination.model.js";
+import User from "../users/user.model.js";
 import asyncHandler from "../../utils/asyncHandler.js";
 import { verifyJWT } from "../../middleware/auth.middleware.js";
 
@@ -8,7 +11,22 @@ const router = Router();
 router.get(
   "/destination/:destinationId",
   asyncHandler(async (req, res) => {
-    const reviews = await Review.find({ destination: req.params.destinationId })
+    let destId = req.params.destinationId;
+    if (!mongoose.Types.ObjectId.isValid(destId)) {
+      const cleanSlug = destId.replace(/-/g, " ").trim();
+      const d = await Destination.findOne({ name: { $regex: cleanSlug, $options: "i" } });
+      destId = d ? d._id : null;
+    }
+
+    if (!destId) {
+      return res.status(200).json({
+        success: true,
+        data: [],
+        stats: { count: 0, averageRating: 0 },
+      });
+    }
+
+    const reviews = await Review.find({ destination: destId })
       .populate("author", "name profileImage")
       .sort("-createdAt");
     
@@ -29,8 +47,18 @@ router.post(
   "/destination/:destinationId",
   verifyJWT,
   asyncHandler(async (req, res) => {
+    let destId = req.params.destinationId;
+    if (!mongoose.Types.ObjectId.isValid(destId)) {
+      const cleanSlug = destId.replace(/-/g, " ").trim();
+      const d = await Destination.findOne({ name: { $regex: cleanSlug, $options: "i" } });
+      if (!d) {
+        return res.status(404).json({ success: false, message: "Destination not found" });
+      }
+      destId = d._id;
+    }
+
     const existing = await Review.findOne({
-      destination: req.params.destinationId,
+      destination: destId,
       author: req.user._id,
     });
 
@@ -45,7 +73,7 @@ router.post(
     const review = await Review.create({
       rating: req.body.rating,
       comment: req.body.comment,
-      destination: req.params.destinationId,
+      destination: destId,
       author: req.user._id,
     });
 

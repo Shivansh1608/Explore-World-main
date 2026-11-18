@@ -1,12 +1,22 @@
 import { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Compass, Search, Bell, MessageSquare } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 
 export default function Navbar() {
   const { user } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/explore?search=${encodeURIComponent(searchQuery.trim())}`);
+    } else {
+      navigate("/explore");
+    }
+  };
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -65,7 +75,7 @@ export default function Navbar() {
 
         {/* Right side: Search pill & user avatar / notifications */}
         <div className="flex items-center gap-4">
-          <div className="relative hidden md:block">
+          <form onSubmit={handleSearchSubmit} className="relative hidden md:block">
             <Search className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
             <input
               type="text"
@@ -74,7 +84,7 @@ export default function Navbar() {
               placeholder="Search destinations"
               className="w-64 pl-11 pr-4 py-2 bg-slate-50 border border-slate-200/80 rounded-full text-xs font-medium text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#00875a]/30 focus:border-[#00875a]"
             />
-          </div>
+          </form>
 
           <div className="flex items-center gap-3">
             <button className="relative p-2 text-slate-500 hover:text-slate-800 rounded-full hover:bg-slate-50 transition-colors">

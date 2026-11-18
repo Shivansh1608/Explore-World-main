@@ -7,6 +7,6 @@ coverage/
 .DS_Store
 out.log
 err.log
-data/
+/data/
 legacy-monolith/
 

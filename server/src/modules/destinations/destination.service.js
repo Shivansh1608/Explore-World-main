@@ -1,4 +1,6 @@
+import mongoose from "mongoose";
 import Destination from "./destination.model.js";
+import User from "../users/user.model.js";
 import ApiError from "../../utils/ApiError.js";
 
 export const getDestinations = async (query = {}) => {
@@ -61,10 +63,21 @@ export const getDestinations = async (query = {}) => {
 };
 
 export const getDestinationById = async (id) => {
-  const destination = await Destination.findById(id).populate(
-    "createdBy",
-    "name profileImage bio role"
-  );
+  let destination = null;
+  if (mongoose.Types.ObjectId.isValid(id)) {
+    destination = await Destination.findById(id).populate(
+      "createdBy",
+      "name profileImage bio role"
+    );
+  }
+
+  if (!destination) {
+    const cleanSlug = id.replace(/-/g, " ").trim();
+    destination = await Destination.findOne({
+      name: { $regex: cleanSlug, $options: "i" },
+    }).populate("createdBy", "name profileImage bio role");
+  }
+
   if (!destination) {
     throw new ApiError(404, "Destination not found");
   }

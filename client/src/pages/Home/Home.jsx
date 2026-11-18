@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import API from "../../services/api";
+import { fallbackDestinations } from "../../data/fallbackDestinations";
 import {
   Search,
   Star,
@@ -17,7 +19,26 @@ import {
 
 export default function Home() {
   const [searchDestination, setSearchDestination] = useState("");
+  const [popularDestinations, setPopularDestinations] = useState(fallbackDestinations.slice(0, 6));
   const navigate = useNavigate();
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchPopular = async () => {
+      try {
+        const res = await API.get("/destinations?limit=6");
+        if (res?.data?.data && res.data.data.length > 0) {
+          if (isMounted) setPopularDestinations(res.data.data);
+        }
+      } catch (err) {
+        console.warn("Home destinations fallback:", err.message);
+      }
+    };
+    fetchPopular();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -27,69 +48,6 @@ export default function Home() {
       navigate("/explore");
     }
   };
-
-  const popularDestinations = [
-    {
-      id: "bali",
-      name: "Bali",
-      location: "Ubud, Indonesia",
-      category: "Beach",
-      rating: 4.9,
-      price: "₹42,000",
-      image:
-        "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      id: "manali",
-      name: "Manali",
-      location: "Himachal Pradesh, India",
-      category: "Mountains",
-      rating: 4.8,
-      price: "₹18,500",
-      image:
-        "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      id: "swiss-alps",
-      name: "Swiss Alps",
-      location: "Interlaken, Switzerland",
-      category: "Adventure",
-      rating: 4.9,
-      price: "₹1,48,000",
-      image:
-        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      id: "paris",
-      name: "Paris",
-      location: "Île-de-France, France",
-      category: "Historical",
-      rating: 4.7,
-      price: "₹92,000",
-      image:
-        "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      id: "maldives",
-      name: "Maldives",
-      location: "North Malé Atoll, Maldives",
-      category: "Beach",
-      rating: 4.9,
-      price: "₹78,000",
-      image:
-        "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=800&q=80",
-    },
-    {
-      id: "tokyo",
-      name: "Tokyo",
-      location: "Kantō, Japan",
-      category: "Culture",
-      rating: 4.8,
-      price: "₹84,000",
-      image:
-        "https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=800&q=80",
-    },
-  ];
 
   const categories = [
     {
@@ -251,52 +209,69 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {popularDestinations.map((dest) => (
-            <div
-              key={dest.id}
-              className="group bg-white rounded-3xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col"
-            >
-              <div className="relative w-full h-56 overflow-hidden">
-                <img
-                  src={dest.image}
-                  alt={dest.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <span className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-slate-800 shadow-sm">
-                  {dest.category}
-                </span>
-                <button className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-slate-600 hover:text-slate-900 shadow-sm transition-colors">
-                  <Bookmark className="w-4 h-4" />
-                </button>
-              </div>
+          {popularDestinations.map((dest) => {
+            const destId = dest._id || dest.id;
+            const displayImage =
+              dest.images?.[0]?.url ||
+              dest.image ||
+              "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80";
+            const displayCategory = Array.isArray(dest.category)
+              ? dest.category[0] || "Explore"
+              : dest.category || "Explore";
+            const displayLocation = dest.city
+              ? `${dest.city}, ${dest.country}`
+              : dest.location || dest.country || "";
+            const displayPrice = dest.estimatedBudget
+              ? `₹${dest.estimatedBudget.toLocaleString()}`
+              : dest.price || "₹25,000";
 
-              <div className="p-5 flex-1 flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-bold text-slate-900">{dest.name}</h3>
-                    <div className="flex items-center gap-1 text-xs font-bold text-slate-800">
-                      <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
-                      <span>{dest.rating}</span>
-                    </div>
-                  </div>
-                  <p className="text-xs text-slate-400 mt-1">{dest.location}</p>
+            return (
+              <div
+                key={destId}
+                className="group bg-white rounded-3xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-md transition-all flex flex-col"
+              >
+                <div className="relative w-full h-56 overflow-hidden">
+                  <img
+                    src={displayImage}
+                    alt={dest.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <span className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-slate-800 shadow-sm">
+                    {displayCategory}
+                  </span>
+                  <button className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-slate-600 hover:text-slate-900 shadow-sm transition-colors">
+                    <Bookmark className="w-4 h-4" />
+                  </button>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                <div className="p-5 flex-1 flex flex-col justify-between">
                   <div>
-                    <span className="text-[11px] text-slate-400 block font-medium">from</span>
-                    <span className="text-sm font-black text-slate-900">{dest.price}</span>
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-bold text-slate-900">{dest.name}</h3>
+                      <div className="flex items-center gap-1 text-xs font-bold text-slate-800">
+                        <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                        <span>{dest.rating || 4.8}</span>
+                      </div>
+                    </div>
+                    <p className="text-xs text-slate-400 mt-1">{displayLocation}</p>
                   </div>
-                  <Link
-                    to={`/destinations/${dest.id}`}
-                    className="text-xs font-bold text-[#00875a] flex items-center gap-1 hover:underline"
-                  >
-                    View details &gt;
-                  </Link>
+
+                  <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
+                    <div>
+                      <span className="text-[11px] text-slate-400 block font-medium">from</span>
+                      <span className="text-sm font-black text-slate-900">{displayPrice}</span>
+                    </div>
+                    <Link
+                      to={`/destinations/${destId}`}
+                      className="text-xs font-bold text-[#00875a] flex items-center gap-1 hover:underline"
+                    >
+                      View details &gt;
+                    </Link>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 

@@ -30,6 +30,7 @@ const destinationSchema = new mongoose.Schema(
           "Adventure",
           "Religious",
           "Wildlife",
+          "Culture",
           "Other",
         ],
       },
