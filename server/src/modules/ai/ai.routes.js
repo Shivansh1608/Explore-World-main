@@ -7,27 +7,18 @@ const router = Router();
 /* ───────── Gemini Setup ───────── */
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-const MODEL_PREFERENCE = ["gemini-3.8-flash", "gemini-2.0-flash-lite"];
+const MODEL_PREFERENCE = ["gemini-3.5-flash", "gemini-3.6-flash", "gemini-3.8-flash"];
 
-/** Try preferred models in order; retry once on 503 */
-async function getWorkingModel(opts) {
-  for (const name of MODEL_PREFERENCE) {
+/** Try the operation with model fallback on 503 */
+async function callWithModelFallback(fn) {
+  for (let i = 0; i < MODEL_PREFERENCE.length; i++) {
+    const modelName = MODEL_PREFERENCE[i];
     try {
-      return genAI.getGenerativeModel({ model: name, ...opts });
-    } catch {
-      continue;
-    }
-  }
-  return genAI.getGenerativeModel({ model: MODEL_PREFERENCE[0], ...opts });
-}
-
-async function callWithRetry(fn, retries = 2) {
-  for (let i = 0; i < retries; i++) {
-    try {
-      return await fn();
+      return await fn(modelName);
     } catch (err) {
-      if (err.status === 503 && i < retries - 1) {
-        await new Promise((r) => setTimeout(r, 1000 * (i + 1)));
+      const is503 = err.status === 503 || err.statusText === "Service Unavailable";
+      if (is503 && i < MODEL_PREFERENCE.length - 1) {
+        console.log(`Model ${modelName} returned 503, trying ${MODEL_PREFERENCE[i + 1]}...`);
         continue;
       }
       throw err;
@@ -73,26 +64,28 @@ router.post(
       return res.status(500).json({ success: false, message: "AI service not configured" });
     }
 
-    const model = genAI.getGenerativeModel({
-      model: MODEL_PREFERENCE[0],
-      systemInstruction: SYSTEM_PROMPT,
-    });
+    const result = await callWithModelFallback(async (modelName) => {
+      const model = genAI.getGenerativeModel({
+        model: modelName,
+        systemInstruction: SYSTEM_PROMPT,
+      });
 
-    // Build chat history from frontend messages
-    const chatHistory = [];
-    if (Array.isArray(history)) {
-      for (const h of history) {
-        if (h.role && h.text) {
-          chatHistory.push({
-            role: h.role === "user" ? "user" : "model",
-            parts: [{ text: h.text }],
-          });
+      // Build chat history from frontend messages
+      const chatHistory = [];
+      if (Array.isArray(history)) {
+        for (const h of history) {
+          if (h.role && h.text) {
+            chatHistory.push({
+              role: h.role === "user" ? "user" : "model",
+              parts: [{ text: h.text }],
+            });
+          }
         }
       }
-    }
 
-    const chat = model.startChat({ history: chatHistory });
-    const result = await callWithRetry(() => chat.sendMessage(message));
+      const chat = model.startChat({ history: chatHistory });
+      return chat.sendMessage(message);
+    });
     const reply = result.response.text();
 
     // Extract destination slugs mentioned in the response for clickable chips
@@ -155,11 +148,6 @@ router.post(
       });
     }
 
-    const model = genAI.getGenerativeModel({
-      model: MODEL_PREFERENCE[0],
-      systemInstruction: SYSTEM_PROMPT,
-    });
-
     const prompt = `Give me 2 travel destination recommendations based on:
 - Budget: ${budget || "flexible"}
 - Duration: ${duration || "3-5 days"}
@@ -169,7 +157,13 @@ router.post(
 Respond in JSON format only (no markdown, no code fences) with this structure:
 {"recommendations":[{"destination":"...","country":"...","category":"...","estimatedCost":"...","bestSeason":"...","itinerarySummary":"...","highlights":["..."]}]}`;
 
-    const result = await callWithRetry(() => model.generateContent(prompt));
+    const result = await callWithModelFallback(async (modelName) => {
+      const model = genAI.getGenerativeModel({
+        model: modelName,
+        systemInstruction: SYSTEM_PROMPT,
+      });
+      return model.generateContent(prompt);
+    });
     const text = result.response.text().replace(/```json\n?|\n?```/g, "").trim();
 
     let parsed;
