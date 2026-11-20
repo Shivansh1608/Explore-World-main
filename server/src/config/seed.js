@@ -201,6 +201,196 @@ const seedData = async () => {
         status: "approved",
         createdBy: user._id,
       },
+      {
+        name: "Santorini & Oia",
+        country: "Greece",
+        state: "Cyclades",
+        city: "Oia",
+        category: ["Beaches", "Historical"],
+        description:
+          "Famous for its dramatic volcanic caldera, dazzling whitewashed cubiform buildings with cobalt-blue domes clinging to 300-meter cliffs, and world-renowned Aegean sunsets.",
+        images: [
+          {
+            url: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=800&q=80",
+          },
+        ],
+        location: { type: "Point", coordinates: [25.3753, 36.4618] },
+        estimatedBudget: 85000,
+        bestTimeToVisit: ["May", "June", "September", "October"],
+        status: "approved",
+        createdBy: admin._id,
+      },
+      {
+        name: "Dubai Skyline & Desert",
+        country: "United Arab Emirates",
+        state: "Emirate of Dubai",
+        city: "Dubai",
+        category: ["Adventure", "Culture"],
+        description:
+          "A city of architectural wonders combining the world's tallest building (Burj Khalifa) with opulent shopping malls, man-made islands, luxury dune bashing, and rich Arabian spice souks.",
+        images: [
+          {
+            url: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80",
+          },
+        ],
+        location: { type: "Point", coordinates: [55.2708, 25.2048] },
+        estimatedBudget: 65000,
+        bestTimeToVisit: ["November", "December", "January", "February", "March"],
+        status: "approved",
+        createdBy: user._id,
+      },
+      {
+        name: "New York City",
+        country: "United States",
+        state: "New York",
+        city: "New York",
+        category: ["Culture", "Historical"],
+        description:
+          "The city that never sleeps: from the towering Empire State Building and Statue of Liberty to Central Park, Broadway theaters, world-class art at MoMA, and vibrant cultural neighborhoods.",
+        images: [
+          {
+            url: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=800&q=80",
+          },
+        ],
+        location: { type: "Point", coordinates: [-74.006, 40.7128] },
+        estimatedBudget: 125000,
+        bestTimeToVisit: ["April", "May", "September", "October", "December"],
+        status: "approved",
+        createdBy: admin._id,
+      },
+      {
+        name: "Rome & The Colosseum",
+        country: "Italy",
+        state: "Lazio",
+        city: "Rome",
+        category: ["Historical", "Culture"],
+        description:
+          "The Eternal City where ancient ruins like the Colosseum, Pantheon, and Roman Forum sit alongside lively piazzas, the Vatican museums, and sublime authentic Italian cuisine.",
+        images: [
+          {
+            url: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=800&q=80",
+          },
+        ],
+        location: { type: "Point", coordinates: [12.4964, 41.9028] },
+        estimatedBudget: 76000,
+        bestTimeToVisit: ["March", "April", "May", "September", "October"],
+        status: "approved",
+        createdBy: user._id,
+      },
+      {
+        name: "Banff & Lake Louise",
+        country: "Canada",
+        state: "Alberta",
+        city: "Banff",
+        category: ["Mountains", "Wildlife", "Adventure"],
+        description:
+          "Located in the heart of the Canadian Rockies, Banff is famed for glowing turquoise glacial lakes like Lake Louise and Moraine Lake, towering limestone peaks, and abundant elk and bear wildlife.",
+        images: [
+          {
+            url: "https://images.unsplash.com/photo-1517411032315-54ef2cb783bb?auto=format&fit=crop&w=800&q=80",
+          },
+        ],
+        location: { type: "Point", coordinates: [-115.5708, 51.1784] },
+        estimatedBudget: 132000,
+        bestTimeToVisit: ["June", "July", "August", "September", "December"],
+        status: "approved",
+        createdBy: admin._id,
+      },
+      {
+        name: "Serengeti National Park",
+        country: "Tanzania",
+        state: "Mara Region",
+        city: "Arusha",
+        category: ["Wildlife", "Adventure"],
+        description:
+          "Vast African savannahs that host the Great Migration of over two million wildebeest and zebras. Home to lions, leopards, elephants, and breathtaking golden acacia sunrises.",
+        images: [
+          {
+            url: "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=800&q=80",
+          },
+        ],
+        location: { type: "Point", coordinates: [34.8333, -2.3333] },
+        estimatedBudget: 185000,
+        bestTimeToVisit: ["June", "July", "August", "September", "October"],
+        status: "approved",
+        createdBy: user._id,
+      },
+      {
+        name: "Cairo & Pyramids of Giza",
+        country: "Egypt",
+        state: "Cairo Governorate",
+        city: "Giza",
+        category: ["Historical", "Culture"],
+        description:
+          "The last surviving wonder of the ancient world. Stand before the Great Pyramid of Khufu, gaze upon the enigmatic Great Sphinx, and sail the historic River Nile on a traditional felucca.",
+        images: [
+          {
+            url: "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?auto=format&fit=crop&w=800&q=80",
+          },
+        ],
+        location: { type: "Point", coordinates: [31.1342, 29.9792] },
+        estimatedBudget: 58000,
+        bestTimeToVisit: ["October", "November", "December", "January", "February", "March"],
+        status: "approved",
+        createdBy: admin._id,
+      },
+      {
+        name: "Ladakh & Pangong Tso",
+        country: "India",
+        state: "Ladakh",
+        city: "Leh",
+        category: ["Mountains", "Adventure"],
+        description:
+          "The Land of High Passes: stark lunar landscapes, ancient cliffside Tibetan Buddhist gompas, the world's highest motorable passes, and the deep shifting blues of Pangong Tso lake.",
+        images: [
+          {
+            url: "https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=800&q=80",
+          },
+        ],
+        location: { type: "Point", coordinates: [77.5771, 34.1526] },
+        estimatedBudget: 28000,
+        bestTimeToVisit: ["May", "June", "July", "August", "September"],
+        status: "approved",
+        createdBy: user._id,
+      },
+      {
+        name: "Rio de Janeiro",
+        country: "Brazil",
+        state: "State of Rio de Janeiro",
+        city: "Rio de Janeiro",
+        category: ["Beaches", "Culture"],
+        description:
+          "The Marvelous City where lush rainforest-covered mountains meet the Atlantic Ocean. World-famous for the Christ the Redeemer statue, Copacabana and Ipanema beaches, and infectious samba rhythms.",
+        images: [
+          {
+            url: "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&w=800&q=80",
+          },
+        ],
+        location: { type: "Point", coordinates: [-43.1729, -22.9068] },
+        estimatedBudget: 95000,
+        bestTimeToVisit: ["December", "January", "February", "March"],
+        status: "approved",
+        createdBy: admin._id,
+      },
+      {
+        name: "Queenstown & Milford Sound",
+        country: "New Zealand",
+        state: "Otago",
+        city: "Queenstown",
+        category: ["Adventure", "Mountains"],
+        description:
+          "The adventure capital of the Southern Hemisphere, nestled on the shores of Lake Wakatipu against the Remarkables mountain range. Gateway to dramatic fiord cruising in Milford Sound and jet boating.",
+        images: [
+          {
+            url: "https://images.unsplash.com/photo-1507699622108-4be3abd695ad?auto=format&fit=crop&w=800&q=80",
+          },
+        ],
+        location: { type: "Point", coordinates: [168.6626, -45.0312] },
+        estimatedBudget: 155000,
+        bestTimeToVisit: ["December", "January", "February", "March", "July", "August"],
+        status: "approved",
+        createdBy: user._id,
+      },
     ]);
 
     // Create Sample Post

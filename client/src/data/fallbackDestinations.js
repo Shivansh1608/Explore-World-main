@@ -269,4 +269,334 @@ export const fallbackDestinations = [
       },
     ],
   },
+  {
+    id: "santorini",
+    _id: "santorini",
+    name: "Santorini & Oia",
+    city: "Oia",
+    state: "Cyclades",
+    country: "Greece",
+    category: ["Beaches", "Historical"],
+    rating: 4.9,
+    price: "₹85,000",
+    estimatedBudget: 85000,
+    description:
+      "Famous for its dramatic volcanic caldera, dazzling whitewashed cubiform buildings with cobalt-blue domes clinging to 300-meter cliffs, and world-renowned Aegean sunsets.",
+    bestTimeToVisit: ["May", "June", "September", "October"],
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=1200&q=80",
+      },
+    ],
+    createdBy: {
+      name: "Admin Explorer",
+      role: "admin",
+      profileImage: "https://api.dicebear.com/7.x/initials/svg?seed=Admin",
+    },
+    reviews: [
+      {
+        _id: "rev-santorini-1",
+        author: { name: "Nikos Kazantzakis", profileImage: "https://api.dicebear.com/7.x/initials/svg?seed=Nikos" },
+        rating: 5,
+        comment: "The sunset from the Byzantine castle ruins in Oia is pure poetry. Unmatched views across the caldera.",
+      },
+    ],
+  },
+  {
+    id: "dubai",
+    _id: "dubai",
+    name: "Dubai Skyline & Desert",
+    city: "Dubai",
+    state: "Emirate of Dubai",
+    country: "United Arab Emirates",
+    category: ["Adventure", "Culture"],
+    rating: 4.8,
+    price: "₹65,000",
+    estimatedBudget: 65000,
+    description:
+      "A city of architectural wonders combining the world's tallest building (Burj Khalifa) with opulent shopping malls, man-made islands, luxury dune bashing, and rich Arabian spice souks.",
+    bestTimeToVisit: ["November", "December", "January", "February", "March"],
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=80",
+      },
+    ],
+    createdBy: {
+      name: "Aarav Sharma",
+      role: "user",
+      profileImage: "https://api.dicebear.com/7.x/initials/svg?seed=Aarav",
+    },
+    reviews: [
+      {
+        _id: "rev-dubai-1",
+        author: { name: "Zaid Al-Maktoum", profileImage: "https://api.dicebear.com/7.x/initials/svg?seed=Zaid" },
+        rating: 5,
+        comment: "The desert safari sunset and Burj Khalifa observation deck were unforgettable experiences!",
+      },
+    ],
+  },
+  {
+    id: "new-york",
+    _id: "new-york",
+    name: "New York City",
+    city: "New York",
+    state: "New York",
+    country: "United States",
+    category: ["Culture", "Historical"],
+    rating: 4.8,
+    price: "₹1,25,000",
+    estimatedBudget: 125000,
+    description:
+      "The city that never sleeps: from the towering Empire State Building and Statue of Liberty to Central Park, Broadway theaters, world-class art at MoMA, and vibrant cultural neighborhoods.",
+    bestTimeToVisit: ["April", "May", "September", "October", "December"],
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1200&q=80",
+      },
+    ],
+    createdBy: {
+      name: "Admin Explorer",
+      role: "admin",
+      profileImage: "https://api.dicebear.com/7.x/initials/svg?seed=Admin",
+    },
+    reviews: [
+      {
+        _id: "rev-nyc-1",
+        author: { name: "Jessica Taylor", profileImage: "https://api.dicebear.com/7.x/initials/svg?seed=Jessica" },
+        rating: 5,
+        comment: "Walking the Brooklyn Bridge at sunrise and exploring Greenwich Village cafes made my trip!",
+      },
+    ],
+  },
+  {
+    id: "rome",
+    _id: "rome",
+    name: "Rome & The Colosseum",
+    city: "Rome",
+    state: "Lazio",
+    country: "Italy",
+    category: ["Historical", "Culture"],
+    rating: 4.9,
+    price: "₹76,000",
+    estimatedBudget: 76000,
+    description:
+      "The Eternal City where ancient ruins like the Colosseum, Pantheon, and Roman Forum sit alongside lively piazzas, the Vatican museums, and sublime authentic Italian cuisine.",
+    bestTimeToVisit: ["March", "April", "May", "September", "October"],
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1552832230-c0197dd311b5?auto=format&fit=crop&w=1200&q=80",
+      },
+    ],
+    createdBy: {
+      name: "Aarav Sharma",
+      role: "user",
+      profileImage: "https://api.dicebear.com/7.x/initials/svg?seed=Aarav",
+    },
+    reviews: [
+      {
+        _id: "rev-rome-1",
+        author: { name: "Marco Bellini", profileImage: "https://api.dicebear.com/7.x/initials/svg?seed=Marco" },
+        rating: 5,
+        comment: "Tossing a coin into the Trevi Fountain at night was magical. The pasta carbonara is unbeatable.",
+      },
+    ],
+  },
+  {
+    id: "banff",
+    _id: "banff",
+    name: "Banff & Lake Louise",
+    city: "Banff",
+    state: "Alberta",
+    country: "Canada",
+    category: ["Mountains", "Wildlife", "Adventure"],
+    rating: 4.9,
+    price: "₹1,32,000",
+    estimatedBudget: 132000,
+    description:
+      "Located in the heart of the Canadian Rockies, Banff is famed for glowing turquoise glacial lakes like Lake Louise and Moraine Lake, towering limestone peaks, and abundant elk and bear wildlife.",
+    bestTimeToVisit: ["June", "July", "August", "September", "December"],
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1517411032315-54ef2cb783bb?auto=format&fit=crop&w=1200&q=80",
+      },
+    ],
+    createdBy: {
+      name: "Admin Explorer",
+      role: "admin",
+      profileImage: "https://api.dicebear.com/7.x/initials/svg?seed=Admin",
+    },
+    reviews: [
+      {
+        _id: "rev-banff-1",
+        author: { name: "David Miller", profileImage: "https://api.dicebear.com/7.x/initials/svg?seed=David" },
+        rating: 5,
+        comment: "Canoeing on Moraine Lake surrounded by the Ten Peaks was the most beautiful view of my life.",
+      },
+    ],
+  },
+  {
+    id: "serengeti",
+    _id: "serengeti",
+    name: "Serengeti National Park",
+    city: "Arusha",
+    state: "Mara Region",
+    country: "Tanzania",
+    category: ["Wildlife", "Adventure"],
+    rating: 4.9,
+    price: "₹1,85,000",
+    estimatedBudget: 185000,
+    description:
+      "Vast African savannahs that host the Great Migration of over two million wildebeest and zebras. Home to lions, leopards, elephants, and breathtaking golden acacia sunrises.",
+    bestTimeToVisit: ["June", "July", "August", "September", "October"],
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1200&q=80",
+      },
+    ],
+    createdBy: {
+      name: "Aarav Sharma",
+      role: "user",
+      profileImage: "https://api.dicebear.com/7.x/initials/svg?seed=Aarav",
+    },
+    reviews: [
+      {
+        _id: "rev-serengeti-1",
+        author: { name: "Amara Mwangi", profileImage: "https://api.dicebear.com/7.x/initials/svg?seed=Amara" },
+        rating: 5,
+        comment: "Witnessing lions on the kopjes at dawn was an experience that changes how you see nature.",
+      },
+    ],
+  },
+  {
+    id: "cairo",
+    _id: "cairo",
+    name: "Cairo & Pyramids of Giza",
+    city: "Giza",
+    state: "Cairo Governorate",
+    country: "Egypt",
+    category: ["Historical", "Culture"],
+    rating: 4.8,
+    price: "₹58,000",
+    estimatedBudget: 58000,
+    description:
+      "The last surviving wonder of the ancient world. Stand before the Great Pyramid of Khufu, gaze upon the enigmatic Great Sphinx, and sail the historic River Nile on a traditional felucca.",
+    bestTimeToVisit: ["October", "November", "December", "January", "February", "March"],
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?auto=format&fit=crop&w=1200&q=80",
+      },
+    ],
+    createdBy: {
+      name: "Admin Explorer",
+      role: "admin",
+      profileImage: "https://api.dicebear.com/7.x/initials/svg?seed=Admin",
+    },
+    reviews: [
+      {
+        _id: "rev-cairo-1",
+        author: { name: "Tariq Hassan", profileImage: "https://api.dicebear.com/7.x/initials/svg?seed=Tariq" },
+        rating: 5,
+        comment: "Standing next to stones carved over 4,500 years ago is humbling. Do hire a camel for the desert panorama!",
+      },
+    ],
+  },
+  {
+    id: "ladakh",
+    _id: "ladakh",
+    name: "Ladakh & Pangong Tso",
+    city: "Leh",
+    state: "Ladakh",
+    country: "India",
+    category: ["Mountains", "Adventure"],
+    rating: 4.9,
+    price: "₹28,000",
+    estimatedBudget: 28000,
+    description:
+      "The Land of High Passes: stark lunar landscapes, ancient cliffside Tibetan Buddhist gompas, the world's highest motorable passes, and the deep shifting blues of Pangong Tso lake.",
+    bestTimeToVisit: ["May", "June", "July", "August", "September"],
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=1200&q=80",
+      },
+    ],
+    createdBy: {
+      name: "Aarav Sharma",
+      role: "user",
+      profileImage: "https://api.dicebear.com/7.x/initials/svg?seed=Aarav",
+    },
+    reviews: [
+      {
+        _id: "rev-ladakh-1",
+        author: { name: "Rohan Varma", profileImage: "https://api.dicebear.com/7.x/initials/svg?seed=Rohan" },
+        rating: 5,
+        comment: "Stargazing by Pangong Lake at 14,000 feet was surreal. The Milky Way was clearly visible with naked eyes.",
+      },
+    ],
+  },
+  {
+    id: "rio",
+    _id: "rio",
+    name: "Rio de Janeiro",
+    city: "Rio de Janeiro",
+    state: "State of Rio de Janeiro",
+    country: "Brazil",
+    category: ["Beaches", "Culture"],
+    rating: 4.8,
+    price: "₹95,000",
+    estimatedBudget: 95000,
+    description:
+      "The Marvelous City where lush rainforest-covered mountains meet the Atlantic Ocean. World-famous for the Christ the Redeemer statue, Copacabana and Ipanema beaches, and infectious samba rhythms.",
+    bestTimeToVisit: ["December", "January", "February", "March"],
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&w=1200&q=80",
+      },
+    ],
+    createdBy: {
+      name: "Admin Explorer",
+      role: "admin",
+      profileImage: "https://api.dicebear.com/7.x/initials/svg?seed=Admin",
+    },
+    reviews: [
+      {
+        _id: "rev-rio-1",
+        author: { name: "Mateo Silva", profileImage: "https://api.dicebear.com/7.x/initials/svg?seed=Mateo" },
+        rating: 5,
+        comment: "Cable car up Sugarloaf Mountain at dusk offers one of the greatest city views on earth.",
+      },
+    ],
+  },
+  {
+    id: "queenstown",
+    _id: "queenstown",
+    name: "Queenstown & Milford Sound",
+    city: "Queenstown",
+    state: "Otago",
+    country: "New Zealand",
+    category: ["Adventure", "Mountains"],
+    rating: 4.9,
+    price: "₹1,55,000",
+    estimatedBudget: 155000,
+    description:
+      "The adventure capital of the Southern Hemisphere, nestled on the shores of Lake Wakatipu against the Remarkables mountain range. Gateway to dramatic fiord cruising in Milford Sound and jet boating.",
+    bestTimeToVisit: ["December", "January", "February", "March", "July", "August"],
+    images: [
+      {
+        url: "https://images.unsplash.com/photo-1507699622108-4be3abd695ad?auto=format&fit=crop&w=1200&q=80",
+      },
+    ],
+    createdBy: {
+      name: "Aarav Sharma",
+      role: "user",
+      profileImage: "https://api.dicebear.com/7.x/initials/svg?seed=Aarav",
+    },
+    reviews: [
+      {
+        _id: "rev-queenstown-1",
+        author: { name: "Liam Cooper", profileImage: "https://api.dicebear.com/7.x/initials/svg?seed=Liam" },
+        rating: 5,
+        comment: "Bungee jumping, Fergburger, and a scenic flight over Milford Sound. Peak adventure!",
+      },
+    ],
+  },
 ];
