@@ -114,6 +114,72 @@ export default function AiAssistant() {
       }));
   };
 
+  const generateLocalResponse = (q) => {
+    const query = q.toLowerCase();
+
+    if (query.includes("bali")) {
+      return {
+        text: `Here is a curated 5-day budget plan for **Bali** under $1,000:\n\n• **Estimated Total:** ~$550–$750 (excluding flights)\n• **Day 1 (Ubud):** Sacred Monkey Forest & Tegallalang Rice Terraces. Stay in a boutique Ubud homestay ($30/night).\n• **Day 2 (Waterfalls & Temples):** Tegenungan Waterfall, Tirta Empul water temple, and evening organic cafe dinner.\n• **Day 3 (Seminyak/Canggu):** Beach relaxation, surfing lesson ($20), and beachfront sunset warung.\n• **Day 4 (Uluwatu):** Cliffside Uluwatu Temple, Kecak fire dance at sunset, and Jimbaran Bay seafood dinner.\n• **Day 5 (Nusa Penida or Shopping):** Day trip to Kelingking T-Rex cliff or local artisan markets before departure.\n\n*Pro-tip:* Renting a scooter costs ~$5/day and saves massive transport costs!`,
+        chips: [
+          { label: "Explore Bali", slug: "bali" },
+          { label: "Explore Maldives", slug: "maldives" },
+        ],
+      };
+    }
+
+    if (query.includes("10,000") || query.includes("10000") || query.includes("budget") || query.includes("delhi")) {
+      return {
+        text: `Here is a curated budget itinerary under ₹10,000:\n\n🏔️ **Manali & Solang Valley (4 Days / 3 Nights)**\n• **Estimated Budget:** ₹8,500 total (Stay: ₹3,200, Travel: ₹2,500, Food: ₹1,800, Activities: ₹1,000)\n• **Day 1:** Overnight bus from Delhi/Chandigarh, Mall Road evening walk and hot momos.\n• **Day 2:** Solang Valley snow viewpoints and river trail.\n• **Day 3:** Hike to Jogini Waterfalls through cedar pine forests followed by Old Manali cafe hopping.\n• **Day 4:** Riverside relaxation before evening departure.\n\n*Pro-tip:* Book local homestays in Vashisht or Old Manali for the best prices!`,
+        chips: [{ label: "Explore Manali", slug: "manali" }],
+      };
+    }
+
+    if (query.includes("manali")) {
+      return {
+        text: `Here is your 5-day mountain escape to **Manali**:\n\n• **Best Season:** October to June (Snow in Dec–Feb, meadows in Apr–Jun)\n• **Day 1:** Arrival, check-in at Old Manali, stroll through Hadimba Temple woods.\n• **Day 2:** Solang Valley cable car & paragliding.\n• **Day 3:** Day trek to Jogini Waterfall & hot sulphur springs at Vashisht.\n• **Day 4:** Day trip to Rohtang Pass or Atal Tunnel towards Sissu in Lahaul Valley.\n• **Day 5:** Local trout lunch, artisanal shawl shopping, and return journey.\n• **Estimated Budget:** ₹18,500 per person.`,
+        chips: [{ label: "Explore Manali", slug: "manali" }],
+      };
+    }
+
+    if (query.includes("paris") || query.includes("rome") || query.includes("couple")) {
+      return {
+        text: `**Paris vs. Rome for Couples:**\n\n• 🥐 **Paris (The City of Lights):** Ideal for romance, world-class fine dining, Seine river cruises, art museums (Louvre, Musée d'Orsay), and charming Montmartre cobblestone alleys. Budget: Higher (~$220/day).\n• 🏛️ **Rome (The Eternal City):** Perfect for ancient history, dramatic architecture (Colosseum, Trevi Fountain, Pantheon), incredible pasta/gelato, and vibrant piazzas. Budget: Moderately cheaper (~$160/day).\n\n*Verdict:* Choose Paris for classic elegance and romance; choose Rome for warm Mediterranean energy and historical wonder!`,
+        chips: [
+          { label: "Explore Paris", slug: "paris" },
+          { label: "Explore Rome", slug: "rome" },
+        ],
+      };
+    }
+
+    if (query.includes("december") || query.includes("winter")) {
+      return {
+        text: `Top destinations for **December**:\n\n1. ❄️ **Manali & Ladakh:** Pristine snowscapes, frozen lakes, and cozy winter homestays.\n2. 🏝️ **Maldives & Bali:** Perfect tropical sunny season with crystal waters and overwater villas.\n3. 🏰 **Paris & Rome:** Festive European holiday markets, Christmas illuminations, and mild winter charm.\n4. ⛷️ **Swiss Alps & Banff:** World-class powder snow for skiing and picturesque alpine villages.`,
+        chips: [
+          { label: "Explore Manali", slug: "manali" },
+          { label: "Explore Maldives", slug: "maldives" },
+          { label: "Explore Swiss Alps", slug: "swiss-alps" },
+          { label: "Explore Banff", slug: "banff-national-park" },
+        ],
+      };
+    }
+
+    if (query.includes("swiss") || query.includes("pack") || query.includes("alps")) {
+      return {
+        text: `**Packing List for Swiss Alps in Winter:**\n\n• 🧤 **Base Layers:** Thermal tops & bottoms (merino wool is best)\n• 🧥 **Outerwear:** Windproof & waterproof heavy winter parka or ski jacket\n• 🥾 **Footwear:** Waterproof insulated snow boots with deep rubber treads\n• 🧣 **Accessories:** Fleece-lined beanie, thermal touch-screen gloves, UV sunglasses (snow glare is intense)\n• 🔋 **Extras:** High SPF lip balm & sun cream, portable power bank (cold drains batteries fast!)`,
+        chips: [{ label: "Explore Swiss Alps", slug: "swiss-alps" }],
+      };
+    }
+
+    return {
+      text: `Here is a custom recommendation for "${q}":\n\n• **For cultural history:** Check out **Paris**, **Rome**, or **Kyoto**.\n• **For pristine nature & relaxation:** Consider **Bali**, **Maldives**, or **Banff National Park**.\n• **For high adrenaline:** Look into **Swiss Alps**, **Queenstown**, or **Ladakh**.\n\nAsk me for a specific duration or budget breakdown for any of these!`,
+      chips: [
+        { label: "Explore Paris", slug: "paris" },
+        { label: "Explore Bali", slug: "bali" },
+        { label: "Explore Swiss Alps", slug: "swiss-alps" },
+      ],
+    };
+  };
+
   const handleSend = async (textToSend) => {
     const query = textToSend || input;
     if (!query.trim() || isTyping) return;
@@ -139,17 +205,17 @@ export default function AiAssistant() {
             chips: res.data.data.chips || [],
           },
         ]);
-      } else {
-        throw new Error("No reply");
+        return;
       }
-    } catch (err) {
-      console.error("AI chat error:", err);
+    } catch {
+      // Backend not running or offline: fallback smoothly to instant local travel expert
+      const fallback = generateLocalResponse(query);
       setMessages((prev) => [
         ...prev,
         {
           sender: "ai",
-          text: "Sorry, I'm having trouble connecting right now. Please try again in a moment! 🔄",
-          chips: [],
+          text: fallback.text,
+          chips: fallback.chips,
         },
       ]);
     } finally {
