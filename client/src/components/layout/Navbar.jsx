@@ -266,85 +266,98 @@ export default function Navbar() {
             <span>{bookmarks.length}</span>
           </Link>
 
-          {/* User Avatar & Dropdown Menu */}
-          <div className="relative">
-            <button
-              onClick={() => {
-                setShowUserMenu(!showUserMenu);
-                setShowNotifications(false);
-                setShowMessages(false);
-              }}
-              className="w-10 h-10 rounded-full bg-[#d3f9d8] text-[#087f5b] font-bold text-xs flex items-center justify-center hover:opacity-90 transition-opacity border border-[#b2f2bb] cursor-pointer"
-            >
-              {initials}
-            </button>
-
-            {showUserMenu && (
-              <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50">
-                <div className="px-4 py-3 border-b border-slate-100">
-                  <p className="text-xs font-bold text-slate-900 truncate">
-                    {user?.name || "Aarav Rao"}
-                  </p>
-                  <p className="text-[11px] text-slate-400 truncate">
-                    {user?.email || "aarav@gmail.com"}
-                  </p>
+          {/* User Section */}
+          {user ? (
+            <div className="relative">
+              <button
+                onClick={() => {
+                  setShowUserMenu(!showUserMenu);
+                  setShowNotifications(false);
+                  setShowMessages(false);
+                }}
+                className="flex items-center gap-2 p-1 pl-2.5 rounded-full border border-slate-200 hover:border-slate-300 transition-all cursor-pointer"
+              >
+                <span className="text-xs font-bold text-slate-800 hidden sm:inline">
+                  {user.name.split(" ")[0]}
+                </span>
+                <div className="w-8 h-8 rounded-full bg-[#00875a] text-white font-bold text-xs flex items-center justify-center shadow-xs">
+                  {user.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                    .toUpperCase()
+                    .slice(0, 2)}
                 </div>
+              </button>
 
-                <div className="py-1">
-                  <Link
-                    to="/profile"
-                    onClick={() => setShowUserMenu(false)}
-                    className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
-                  >
-                    <UserIcon className="w-4 h-4 text-slate-400" /> My Profile
-                  </Link>
-                  <Link
-                    to="/saved"
-                    onClick={() => setShowUserMenu(false)}
-                    className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
-                  >
-                    <Bookmark className="w-4 h-4 text-slate-400" /> Saved Places ({bookmarks.length})
-                  </Link>
-                  <Link
-                    to="/trips"
-                    onClick={() => setShowUserMenu(false)}
-                    className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
-                  >
-                    <Luggage className="w-4 h-4 text-slate-400" /> My Trips
-                  </Link>
+              {showUserMenu && (
+                <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50">
+                  <div className="px-4 py-3 border-b border-slate-100">
+                    <p className="text-xs font-bold text-slate-900 truncate">{user.name}</p>
+                    <p className="text-[11px] text-slate-400 truncate">{user.email}</p>
+                  </div>
 
-                  {user?.role && ["admin", "moderator"].includes(user.role) && (
+                  <div className="py-1">
                     <Link
-                      to="/admin"
+                      to="/profile"
                       onClick={() => setShowUserMenu(false)}
-                      className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-amber-600 hover:bg-amber-50"
+                      className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
                     >
-                      <Shield className="w-4 h-4 text-amber-500" /> Admin Dashboard
+                      <UserIcon className="w-4 h-4 text-slate-400" /> My Profile
                     </Link>
-                  )}
-                </div>
+                    <Link
+                      to="/saved"
+                      onClick={() => setShowUserMenu(false)}
+                      className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                    >
+                      <Bookmark className="w-4 h-4 text-slate-400" /> Saved Places ({bookmarks.length})
+                    </Link>
+                    <Link
+                      to="/trips"
+                      onClick={() => setShowUserMenu(false)}
+                      className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-slate-700 hover:bg-slate-50"
+                    >
+                      <Luggage className="w-4 h-4 text-slate-400" /> My Trips
+                    </Link>
 
-                <div className="border-t border-slate-100 pt-1">
-                  {user ? (
+                    {user?.role && ["admin", "moderator"].includes(user.role) && (
+                      <Link
+                        to="/admin"
+                        onClick={() => setShowUserMenu(false)}
+                        className="flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-amber-600 hover:bg-amber-50"
+                      >
+                        <Shield className="w-4 h-4 text-amber-500" /> Admin Dashboard
+                      </Link>
+                    )}
+                  </div>
+
+                  <div className="border-t border-slate-100 pt-1">
                     <button
                       onClick={handleLogout}
-                      className="w-full text-left flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50"
+                      className="w-full text-left flex items-center gap-2.5 px-4 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50 cursor-pointer"
                     >
                       <LogOut className="w-4 h-4" /> Sign out
                     </button>
-                  ) : (
-                    <Link
-                      to="/login"
-                      onClick={() => setShowUserMenu(false)}
-                      className="flex items-center gap-2.5 px-4 py-2 text-xs font-bold text-[#00875a] hover:bg-emerald-50"
-                    >
-                      <UserIcon className="w-4 h-4" /> Sign In / Register
-                    </Link>
-                  )}
+                  </div>
                 </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Link
+                to="/login"
+                className="px-3 py-1.5 rounded-full text-xs font-bold text-slate-700 hover:text-slate-900 transition-colors"
+              >
+                Log in
+              </Link>
+              <Link
+                to="/register"
+                className="px-4 py-1.5 rounded-full bg-[#00875a] hover:bg-[#007048] text-white text-xs font-bold shadow-xs transition-colors"
+              >
+                Sign up
+              </Link>
+            </div>
+          )}
 
           {/* Mobile Menu Toggle Button */}
           <button
