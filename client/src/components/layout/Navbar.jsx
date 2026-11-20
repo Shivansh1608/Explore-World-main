@@ -103,11 +103,11 @@ export default function Navbar() {
 
   const initials = user?.name
     ? user.name
-        .split(" ")
-        .map((n) => n[0])
-        .join("")
-        .toUpperCase()
-        .slice(0, 2)
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2)
     : "AR";
 
   return (
@@ -134,11 +134,10 @@ export default function Navbar() {
                 <Link
                   key={item.name}
                   to={item.path}
-                  className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${
-                    isActive
-                      ? "bg-[#e3fcef] text-[#00875a]"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-                  }`}
+                  className={`px-4 py-2 rounded-full text-sm font-semibold transition-all ${isActive
+                    ? "bg-[#e3fcef] text-[#00875a]"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
+                    }`}
                 >
                   {item.name}
                 </Link>
@@ -196,9 +195,8 @@ export default function Navbar() {
                   {notifications.map((n) => (
                     <div
                       key={n.id}
-                      className={`py-2.5 px-2 rounded-xl text-left transition-colors ${
-                        n.unread ? "bg-emerald-50/50" : "hover:bg-slate-50"
-                      }`}
+                      className={`py-2.5 px-2 rounded-xl text-left transition-colors ${n.unread ? "bg-emerald-50/50" : "hover:bg-slate-50"
+                        }`}
                     >
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold text-slate-900">{n.title}</span>
@@ -268,14 +266,14 @@ export default function Navbar() {
 
           {/* User Section */}
           {user ? (
-            <div className="relative">
+            <div className="relative shrink-0">
               <button
                 onClick={() => {
                   setShowUserMenu(!showUserMenu);
                   setShowNotifications(false);
                   setShowMessages(false);
                 }}
-                className="flex items-center gap-2 p-1 pl-2.5 rounded-full border border-slate-200 hover:border-slate-300 transition-all cursor-pointer"
+                className="flex items-center gap-2 p-1.5 pl-3 rounded-full border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 transition-all cursor-pointer whitespace-nowrap shadow-2xs"
               >
                 <span className="text-xs font-bold text-slate-800 hidden sm:inline">
                   {user.name.split(" ")[0]}
@@ -343,16 +341,16 @@ export default function Navbar() {
               )}
             </div>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 shrink-0 whitespace-nowrap">
               <Link
                 to="/login"
-                className="px-3 py-1.5 rounded-full text-xs font-bold text-slate-700 hover:text-slate-900 transition-colors"
+                className="px-4 py-2 rounded-full text-xs font-bold text-slate-700 hover:text-slate-900 hover:bg-slate-100 transition-colors inline-block whitespace-nowrap"
               >
                 Log in
               </Link>
               <Link
                 to="/register"
-                className="px-4 py-1.5 rounded-full bg-[#00875a] hover:bg-[#007048] text-white text-xs font-bold shadow-xs transition-colors"
+                className="px-5 py-2 rounded-full bg-[#00875a] hover:bg-[#007048] text-white text-xs font-bold shadow-xs transition-colors inline-block whitespace-nowrap"
               >
                 Sign up
               </Link>
