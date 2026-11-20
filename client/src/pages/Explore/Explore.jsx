@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import API from "../../services/api";
 import { fallbackDestinations } from "../../data/fallbackDestinations";
+import { useBookmarks } from "../../context/BookmarkContext";
 import { Search, SlidersHorizontal, ChevronDown, Bookmark, Star, Plus, Loader2 } from "lucide-react";
 
 export default function Explore() {
@@ -13,6 +14,7 @@ export default function Explore() {
   const [search, setSearch] = useState(initialSearch);
   const [destinations, setDestinations] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { toggleBookmark, isBookmarked } = useBookmarks();
 
   const categories = ["Mountains", "Beaches", "Adventure", "Historical", "Culture", "Wildlife"];
 
@@ -208,8 +210,19 @@ export default function Explore() {
                 <span className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold text-slate-800 shadow-sm">
                   {displayCategory}
                 </span>
-                <button className="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center text-slate-600 hover:text-slate-900 shadow-sm transition-colors">
-                  <Bookmark className="w-4 h-4" />
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    toggleBookmark(dest);
+                  }}
+                  title={isBookmarked(destId) ? "Remove from wishlist" : "Save to wishlist"}
+                  className={`absolute top-3 right-3 w-9 h-9 rounded-full backdrop-blur-md flex items-center justify-center shadow-sm transition-all ${
+                    isBookmarked(destId)
+                      ? "bg-white text-amber-500 scale-105"
+                      : "bg-white/90 text-slate-600 hover:text-slate-900"
+                  }`}
+                >
+                  <Bookmark className={`w-4 h-4 ${isBookmarked(destId) ? "fill-amber-500" : ""}`} />
                 </button>
               </div>
 

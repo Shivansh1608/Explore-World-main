@@ -2,12 +2,14 @@ import { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import API from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
+import { useBookmarks } from "../../context/BookmarkContext";
 import { fallbackDestinations } from "../../data/fallbackDestinations";
-import { MapPin, Calendar, DollarSign, Star, User, ArrowLeft, Trash2, Send } from "lucide-react";
+import { MapPin, Calendar, DollarSign, Star, User, ArrowLeft, Trash2, Send, Bookmark } from "lucide-react";
 
 export default function DestinationDetail() {
   const { id } = useParams();
   const { user } = useAuth();
+  const { toggleBookmark, isBookmarked } = useBookmarks();
   const navigate = useNavigate();
   const [destination, setDestination] = useState(null);
   const [reviews, setReviews] = useState([]);
@@ -154,6 +156,19 @@ export default function DestinationDetail() {
             alt={destination.name}
             className="w-full h-full object-cover opacity-90"
           />
+          <div className="absolute top-6 right-6 z-20">
+            <button
+              onClick={() => destination && toggleBookmark(destination)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-full font-bold text-xs shadow-md transition-all ${
+                destination && isBookmarked(destination._id || destination.id)
+                  ? "bg-amber-400 text-slate-900"
+                  : "bg-white/90 text-slate-800 hover:bg-white"
+              }`}
+            >
+              <Bookmark className={`w-4 h-4 ${destination && isBookmarked(destination._id || destination.id) ? "fill-slate-900" : ""}`} />
+              {destination && isBookmarked(destination._id || destination.id) ? "Saved in Wishlist" : "Save to Wishlist"}
+            </button>
+          </div>
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
           <div className="absolute bottom-8 left-8 right-8 text-white">
             <div className="flex flex-wrap gap-2 mb-3">
